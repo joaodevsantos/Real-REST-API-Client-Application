@@ -1,6 +1,7 @@
 package com.example.wallpaper.UI.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import com.example.wallpaper.Adapters.CollectionsAdapter;
 import com.example.wallpaper.Models.Collection;
 import com.example.wallpaper.R;
+import com.example.wallpaper.WebService.APIInterface;
+import com.example.wallpaper.WebService.ServiceGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CollectionsFragment extends Fragment {
 
@@ -42,6 +48,12 @@ public class CollectionsFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_collections, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        collectionsAdapter = new CollectionsAdapter(getActivity(), collectionList);
+        gridView.setAdapter(collectionsAdapter);
+
+        showProgressBar(true);
+        getCollections();
+
         return view;
     }
 
@@ -49,5 +61,36 @@ public class CollectionsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    private void getCollections() {
+        APIInterface apiInterface = ServiceGenerator.createService(APIInterface.class);
+        Call<List<Collection>> call = apiInterface.getCollections();
+
+        call.enqueue(new Callback<List<Collection>>() {
+            @Override
+            public void onResponse(Call<List<Collection>> call, Response<List<Collection>> response) {
+                if(response.isSuccessful()){
+                    collectionList.addAll(response.body());
+                    collectionsAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Collection>> call, Throwable t) {
+                Log.e(TAG, "Fail " + t.getMessage());
+                showProgressBar(false);
+            }
+        });
+    }
+
+    private void showProgressBar(boolean isShow){
+        if(isShow){
+            progressBar.setVisibility(View.VISIBLE);
+            gridView.setVisibility(View.GONE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
+        }
     }
 }
