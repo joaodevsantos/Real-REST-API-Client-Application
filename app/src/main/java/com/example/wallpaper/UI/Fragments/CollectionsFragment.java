@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.wallpaper.Adapters.CollectionsAdapter;
 import com.example.wallpaper.Models.Collection;
 import com.example.wallpaper.R;
+import com.example.wallpaper.Utils.Functions;
 import com.example.wallpaper.WebService.APIInterface;
 import com.example.wallpaper.WebService.ServiceGenerator;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +63,19 @@ public class CollectionsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    @OnItemClick(R.id.fragment_collections_gridView)
+    public void setGridView(int position){
+        Collection collection = collectionList.get(position);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("collectionId", collection.getId());
+
+        CollectionFragment collectionFragment = new CollectionFragment();
+        collectionFragment.setArguments(bundle);
+
+        Functions.chainMainFragmentWithBack(getActivity(), collectionFragment);
     }
 
     private void getCollections() {
