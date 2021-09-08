@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.wallpaper.Models.Photo;
 import com.example.wallpaper.R;
+import com.example.wallpaper.Utils.Functions;
 import com.example.wallpaper.WebService.APIInterface;
 import com.example.wallpaper.WebService.ServiceGenerator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,6 +52,7 @@ public class FullscreenPhoto extends AppCompatActivity {
     FloatingActionButton floatWallpaper;
 
     private boolean isClosed = true;
+    private Bitmap photoBitmap;
 
     private Unbinder unbinder;
 
@@ -85,6 +87,18 @@ public class FullscreenPhoto extends AppCompatActivity {
 
     @OnClick(R.id.activity_fullscreen_photo_fab_wallpaper)
     public void onWallpaper(View v){
+        if(photoBitmap != null)
+            if(Functions.setWallpaper(FullscreenPhoto.this, photoBitmap))
+                Toast.makeText(FullscreenPhoto.this,
+                                "Set Wallpaper Successfuly!",
+                                Toast.LENGTH_SHORT)
+                        .show();
+            else
+                Toast.makeText(FullscreenPhoto.this,
+                        "Set Wallpaper Failed!",
+                        Toast.LENGTH_SHORT)
+                        .show();
+
         clickFloatMenu();
     }
 
@@ -122,6 +136,7 @@ public class FullscreenPhoto extends AppCompatActivity {
                                 @Override
                                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                     photo.setImageBitmap(resource);
+                                    photoBitmap = resource;
                                 }
 
                                 @Override
@@ -130,7 +145,7 @@ public class FullscreenPhoto extends AppCompatActivity {
                                 }
                             });
                 } else {
-
+                    Log.d(TAG, "Fail " + response.message());
                 }
             }
 
