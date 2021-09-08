@@ -1,14 +1,23 @@
 package com.example.wallpaper.UI.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.wallpaper.Models.Photo;
 import com.example.wallpaper.R;
 import com.example.wallpaper.WebService.APIInterface;
@@ -21,8 +30,12 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FullscreenPhoto extends AppCompatActivity {
+
+    private String TAG = FullscreenPhoto.class.getSimpleName();
 
     @BindView(R.id.activity_fullscreen_photo_photo)
     ImageView photo;
@@ -88,5 +101,43 @@ public class FullscreenPhoto extends AppCompatActivity {
     }
 
     public void getPhotoById(String id){
+        APIInterface apiInterface = ServiceGenerator.createService(APIInterface.class);
+        Call<Photo> getPhoto = apiInterface.getPhoto(id);
+
+        getPhoto.enqueue(new Callback<Photo>() {
+            @Override
+            public void onResponse(Call<Photo> call, Response<Photo> response) {
+                if(response.isSuccessful()){
+                    Photo pic = response.body();
+
+                    username.setText(pic.getUser().getUsername());
+                    Glide.with(FullscreenPhoto.this)
+                            .load(pic.getUser().getProfileImage().getSmall())
+                            .into(userAvatar);
+                    Glide.with(FullscreenPhoto.this)
+                            .asBitmap()
+                            .load(pic.getUrl().getRegular())
+                            .centerCrop()
+                            .into(new CustomTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    photo.setImageBitmap(resource);
+                                }
+
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                                }
+                            });
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Photo> call, Throwable t) {
+                Log.d(TAG, "Fail " + t.getMessage());
+            }
+        });
     }
 }

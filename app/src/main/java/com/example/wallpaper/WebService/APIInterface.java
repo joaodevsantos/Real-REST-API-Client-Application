@@ -21,4 +21,7 @@ public interface APIInterface {
 
     @GET("collection/{id}/photos")
     Call<List<Photo>> getPhotosOfCollection(@Path("id") int id);
+
+    @GET("photos/{id}")
+    Call<Photo> getPhoto(@Path("id") String id);
 }
