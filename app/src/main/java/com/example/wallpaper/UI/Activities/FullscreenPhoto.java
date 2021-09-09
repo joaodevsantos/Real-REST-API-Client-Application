@@ -21,10 +21,12 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.wallpaper.Models.Photo;
 import com.example.wallpaper.R;
 import com.example.wallpaper.Utils.Functions;
+import com.example.wallpaper.Utils.RealmController;
 import com.example.wallpaper.WebService.APIInterface;
 import com.example.wallpaper.WebService.ServiceGenerator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -51,8 +53,16 @@ public class FullscreenPhoto extends AppCompatActivity {
     @BindView(R.id.activity_fullscreen_photo_fab_wallpaper)
     FloatingActionButton floatWallpaper;
 
+    @BindDrawable(R.drawable.ic_check_favorite)
+    Drawable icFavorite;
+    @BindDrawable(R.drawable.ic_check_favorited)
+    Drawable icFavorited;
+
     private boolean isClosed = true;
     private Bitmap photoBitmap;
+
+    private RealmController realmController;
+    private Photo photoFullscreen;
 
     private Unbinder unbinder;
 
@@ -67,6 +77,11 @@ public class FullscreenPhoto extends AppCompatActivity {
         Intent intent = getIntent();
         String photoId = intent.getStringExtra("photoId");
         getPhotoById(photoId);
+
+        realmController = new RealmController();
+        if(realmController.isPhotoExists(photoId)){
+            floatFavorite.setImageDrawable(icFavorited);
+        }
     }
 
     @Override
@@ -82,6 +97,22 @@ public class FullscreenPhoto extends AppCompatActivity {
 
     @OnClick(R.id.activity_fullscreen_photo_fab_favorite)
     public void onFavorite(View v){
+        if(realmController.isPhotoExists(photoFullscreen.getId())){
+            realmController.deletePhoto(photoFullscreen);
+            floatFavorite.setImageDrawable(icFavorite);
+            Toast.makeText(FullscreenPhoto.this,
+                                "Favorite Removed",
+                                Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            realmController.savePhoto(photoFullscreen);
+            floatFavorite.setImageDrawable(icFavorited);
+            Toast.makeText(FullscreenPhoto.this,
+                                "Favorited",
+                                Toast.LENGTH_SHORT)
+                    .show();
+        }
+
         clickFloatMenu();
     }
 
@@ -122,15 +153,15 @@ public class FullscreenPhoto extends AppCompatActivity {
             @Override
             public void onResponse(Call<Photo> call, Response<Photo> response) {
                 if(response.isSuccessful()){
-                    Photo pic = response.body();
+                    photoFullscreen = response.body();
 
-                    username.setText(pic.getUser().getUsername());
+                    username.setText(photoFullscreen.getUser().getUsername());
                     Glide.with(FullscreenPhoto.this)
-                            .load(pic.getUser().getProfileImage().getSmall())
+                            .load(photoFullscreen.getUser().getProfileImage().getSmall())
                             .into(userAvatar);
                     Glide.with(FullscreenPhoto.this)
                             .asBitmap()
-                            .load(pic.getUrl().getRegular())
+                            .load(photoFullscreen.getUrl().getRegular())
                             .centerCrop()
                             .into(new CustomTarget<Bitmap>() {
                                 @Override
