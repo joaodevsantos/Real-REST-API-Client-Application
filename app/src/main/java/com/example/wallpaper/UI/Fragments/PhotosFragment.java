@@ -32,6 +32,7 @@ import retrofit2.Response;
 public class PhotosFragment extends Fragment {
 
     private final String TAG = PhotosFragment.class.getSimpleName();
+
     @BindView(R.id.fragment_photos_progressBar)
     ProgressBar progressBar;
     @BindView(R.id.fragment_photos_recyclerView)

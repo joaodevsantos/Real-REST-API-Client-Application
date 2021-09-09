@@ -35,9 +35,9 @@ public class CollectionsFragment extends Fragment {
     private final String TAG = CollectionsFragment.class.getSimpleName();
 
     @BindView(R.id.fragment_collections_progressBar)
-    private ProgressBar progressBar;
+    ProgressBar progressBar;
     @BindView(R.id.fragment_collections_gridView)
-    private GridView gridView;
+    GridView gridView;
 
     private CollectionsAdapter collectionsAdapter;
     private List<Collection> collectionList = new ArrayList<>();
