@@ -38,17 +38,17 @@ public class CollectionFragment extends Fragment {
     private final String TAG = CollectionsFragment.class.getSimpleName();
 
     @BindView(R.id.fragment_collection_progressBar)
-    private ProgressBar progressBar;
+    ProgressBar progressBar;
     @BindView(R.id.fragment_collection_recyclerView)
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     @BindView(R.id.fragment_collection_description)
-    private TextView description;
+    TextView description;
     @BindView(R.id.fragment_collection_title)
-    private TextView title;
+    TextView title;
     @BindView(R.id.fragment_collection_username)
-    private TextView username;
+    TextView username;
     @BindView(R.id.fragment_collection_user_avatar)
-    private CircleImageView userAvatar;
+    CircleImageView userAvatar;
 
     private List<Photo> photos = new ArrayList<>();
     private PhotosAdapter photosAdapter;

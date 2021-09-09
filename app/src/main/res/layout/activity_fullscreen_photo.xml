@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/activity_fullscreen_photo_photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/placeholder"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder" />
 
     <LinearLayout
-        android:id="@+id/activity_fullscreen_photo_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
@@ -51,7 +51,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:src="@drawable/ic_check_favorite"
-            android:backgroundTint="@color/primary"/>
+            android:backgroundTint="@color/primary"
+            app:borderWidth="0dp"
+            app:useCompatPadding="false"
+            android:visibility="gone"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/activity_fullscreen_photo_fab_wallpaper"
@@ -59,7 +62,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:src="@drawable/ic_wallpaper"
-            android:backgroundTint="@color/primary"/>
+            android:backgroundTint="@color/primary"
+            app:borderWidth="0dp"
+            android:visibility="gone"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/activity_fullscreen_photo_fab_menu"
@@ -67,7 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:src="@drawable/ic_plus"
-            android:backgroundTint="@color/colorAccent"/>
+            android:backgroundTint="@color/colorAccent"
+            app:borderWidth="0dp"/>
 
     </LinearLayout>
 

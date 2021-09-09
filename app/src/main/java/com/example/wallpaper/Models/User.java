@@ -2,8 +2,12 @@ package com.example.wallpaper.Models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class User extends RealmObject {
     @SerializedName("id")
+    @PrimaryKey
     private String id;
     @SerializedName("username")
     private String username;
