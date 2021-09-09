@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.wallpaper.R;
 
 public class Functions {
-    public static void chainMainFragment(FragmentActivity fragmentActivity,
+    public static void changeMainFragment(FragmentActivity fragmentActivity,
                                           Fragment fragment){
         fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
@@ -22,8 +22,8 @@ public class Functions {
                 .commit();
     }
 
-    public static void chainMainFragmentWithBack(FragmentActivity fragmentActivity,
-                                         Fragment fragment){
+    public static void changeMainFragmentWithBack(FragmentActivity fragmentActivity,
+                                                  Fragment fragment){
         fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_container, fragment)

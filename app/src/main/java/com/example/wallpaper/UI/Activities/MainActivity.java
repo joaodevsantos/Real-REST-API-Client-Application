@@ -8,9 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        PhotosFragment homeFragment = new PhotosFragment();
+        Functions.changeMainFragmentWithBack(MainActivity.this, homeFragment);
     }
 
     @Override
@@ -76,15 +75,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id){
             case R.id.nav_photos:
-                Functions.chainMainFragment(MainActivity.this,
+                Functions.changeMainFragment(MainActivity.this,
                         new PhotosFragment());
                 break;
             case R.id.nav_collections:
-                Functions.chainMainFragment(MainActivity.this,
+                Functions.changeMainFragment(MainActivity.this,
                         new CollectionsFragment());
                 break;
             case R.id.nav_favorites:
-                Functions.chainMainFragment(MainActivity.this,
+                Functions.changeMainFragment(MainActivity.this,
                         new FavoritesFragment());
                 break;
         }

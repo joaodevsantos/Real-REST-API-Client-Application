@@ -26,7 +26,6 @@ import com.example.wallpaper.WebService.APIInterface;
 import com.example.wallpaper.WebService.ServiceGenerator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,7 +37,7 @@ import retrofit2.Response;
 
 public class FullscreenPhoto extends AppCompatActivity {
 
-    private String TAG = FullscreenPhoto.class.getSimpleName();
+    private final String TAG = FullscreenPhoto.class.getSimpleName();
 
     @BindView(R.id.activity_fullscreen_photo_photo)
     ImageView photo;
@@ -52,11 +51,6 @@ public class FullscreenPhoto extends AppCompatActivity {
     FloatingActionButton floatFavorite;
     @BindView(R.id.activity_fullscreen_photo_fab_wallpaper)
     FloatingActionButton floatWallpaper;
-
-    @BindDrawable(R.drawable.ic_check_favorite)
-    Drawable icFavorite;
-    @BindDrawable(R.drawable.ic_check_favorited)
-    Drawable icFavorited;
 
     private boolean isClosed = true;
     private Bitmap photoBitmap;
@@ -80,7 +74,7 @@ public class FullscreenPhoto extends AppCompatActivity {
 
         realmController = new RealmController();
         if(realmController.isPhotoExists(photoId)){
-            floatFavorite.setImageDrawable(icFavorited);
+            floatFavorite.setImageResource(R.drawable.ic_check_favorited);
         }
     }
 
@@ -99,14 +93,14 @@ public class FullscreenPhoto extends AppCompatActivity {
     public void onFavorite(View v){
         if(realmController.isPhotoExists(photoFullscreen.getId())){
             realmController.deletePhoto(photoFullscreen);
-            floatFavorite.setImageDrawable(icFavorite);
+            floatFavorite.setImageResource(R.drawable.ic_check_favorite);
             Toast.makeText(FullscreenPhoto.this,
                                 "Favorite Removed",
                                 Toast.LENGTH_SHORT)
                     .show();
         } else {
             realmController.savePhoto(photoFullscreen);
-            floatFavorite.setImageDrawable(icFavorited);
+            floatFavorite.setImageResource(R.drawable.ic_check_favorited);
             Toast.makeText(FullscreenPhoto.this,
                                 "Favorited",
                                 Toast.LENGTH_SHORT)

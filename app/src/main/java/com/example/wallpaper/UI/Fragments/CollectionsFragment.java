@@ -75,7 +75,7 @@ public class CollectionsFragment extends Fragment {
         CollectionFragment collectionFragment = new CollectionFragment();
         collectionFragment.setArguments(bundle);
 
-        Functions.chainMainFragmentWithBack(getActivity(), collectionFragment);
+        Functions.changeMainFragmentWithBack(getActivity(), collectionFragment);
     }
 
     private void getCollections() {
@@ -88,7 +88,10 @@ public class CollectionsFragment extends Fragment {
                 if(response.isSuccessful()){
                     collectionList.addAll(response.body());
                     collectionsAdapter.notifyDataSetChanged();
+                } else {
+                    Log.e(TAG, "Fail " + response.message());
                 }
+                showProgressBar(false);
             }
 
             @Override
